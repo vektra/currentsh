@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "currentsh"
   spec.version       = Currentsh::VERSION
   spec.authors       = ["Evan Phoenix"]
-  spec.email         = ["evan@phx.io"]
+  spec.email         = ["evan@current.sh"]
 
   spec.summary       = %q{Integration with current.sh}
   spec.description   = %q{Use this gem to send logs to current.sh}
