@@ -45,18 +45,21 @@ module Currentsh
     end
 
     def sql(event)
-        binds = event.payload[:binds].map do |(attribute,value)|
-          { :name => attribute.name, :type => attribute.type, :value => value }
+      binds = {}
+
+      if raw = event.payload[:binds]
+        raw.each do |(attribute,value)|
+          binds[attribute.name] = {:type => attribute.type, :value => value }
         end
+      end
 
-
-        data = {
-          :type => "sql",
-          :name => event.payload[:name],
-          :transaction => event.transaction_id,
-          :query => event.payload[:sql].strip,
-          :binds => binds,
-        }
+      data = {
+        :type => "sql",
+        :name => event.payload[:name],
+        :transaction => event.transaction_id,
+        :query => event.payload[:sql].strip,
+        :binds => binds,
+      }
 
       @output << data
     end
