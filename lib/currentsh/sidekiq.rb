@@ -6,7 +6,7 @@ module Currentsh
       jid = msg['jid']
       context = {
         :class => klass,
-        :jit => jid
+        :jid => jid
       }
 
       if bid = msg['bid']
