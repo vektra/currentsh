@@ -11,3 +11,4 @@ module Currentsh
 end
 
 require 'currentsh/railtie' if defined?(Rails)
+require 'currentsh/sidekiq' if defined?(Sidekiq)
