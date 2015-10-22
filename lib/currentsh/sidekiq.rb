@@ -14,8 +14,14 @@ module Currentsh
       end
 
       LogOutput.with_context(context) do
+
+        lc = {
+          process: ::Process.pid,
+          thread: Thread.current.object_id.to_s(36)
+        }.merge(context)
+
         begin
-          ts = start context
+          ts = start lc
 
           yield
         rescue StandardError => ex
@@ -23,11 +29,11 @@ module Currentsh
           when Interrupt, SystemExit, SignalException
             raise ex
           else
-            error context, ex, ts
+            error lc, ex, ts
             raise ex
           end
         else
-          stop context, ts
+          stop lc, ts
         end
       end
     end
@@ -36,9 +42,6 @@ module Currentsh
       time = Time.now
 
       data = {
-        time: time,
-        process: ::Process.pid,
-        thread: Thread.current.object_id.to_s(36),
         event: "start",
       }.merge!(context)
 
@@ -49,9 +52,6 @@ module Currentsh
 
     def error(context, error, start)
       data = {
-        time: Time.now,
-        process: ::Process.pid,
-        thread: Thread.current.object_id.to_s(36),
         event: "error",
         error: error.to_s,
         elapse: (Time.now - start)
@@ -62,9 +62,6 @@ module Currentsh
 
     def stop(context, start)
       data = {
-        time: Time.now,
-        process: ::Process.pid,
-        thread: Thread.current.object_id.to_s(36),
         event: "stop",
         elapse: (Time.now - start)
       }.merge!(context)
